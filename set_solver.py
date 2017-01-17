@@ -84,10 +84,16 @@ if __name__ == '__main__':
     dimension_count = int(input(
         constants.DIMENSION_COUNT_PROMPT
     ) or constants.DIMENSION_COUNT)
+    if dimension_count < constants.MIN_DIMENSION_COUNT:
+        dimension_count = constants.DIMENSION_COUNT
+        print(constants.DIMENSION_COUNT_TOO_SMALL_PROMPT)
 
     dimension_size = int(input(
         constants.DIMENSION_SIZE_PROMPT
     ) or constants.DIMENSION_SIZE)
+    if dimension_size < constants.MIN_DIMENSION_SIZE:
+        dimension_size = constants.DIMENSION_SIZE
+        print(constants.DIMENSION_SIZE_TOO_SMALL_PROMPT)
 
     set_size = int(input(
         constants.SET_SIZE_PROMPT
