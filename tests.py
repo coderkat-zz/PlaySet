@@ -5,6 +5,7 @@ Need to test:
 """
 import unittest
 
+import constants
 from set_solver import (
     get_cards,
     is_valid_set,
@@ -16,15 +17,16 @@ class TestGetCards(unittest.TestCase):
 
     def setUp(self):
         """Some setup for constants."""
-        self.default_card_count = 12
-        self.default_attr_count = 4
+        self.default_card_count = constants.HAND_SIZE
+        self.default_attr_count = constants.DIMENSION_COUNT
+        self.default_attr_size = constants.DIMENSION_SIZE
 
     def test_n_cards_are_returned(self):
         """Test that we get the expected number of cards back in deck."""
         player_deck = get_cards(
             self.default_card_count,
-            self.default_attr_count
-        )
+            self.default_attr_count,
+            self.default_attr_size)
         self.assertEqual(
             len(player_deck),
             self.default_card_count
@@ -37,7 +39,8 @@ class TestGetCards(unittest.TestCase):
         """
         player_deck = get_cards(
             self.default_card_count,
-            self.default_attr_count + 2
+            self.default_attr_count + 2,
+            self.default_attr_size,
         )
         self.assertEqual(len(player_deck[0]), 6)
 
@@ -61,7 +64,8 @@ class TestIsValidSet(unittest.TestCase):
             ('red', 'oval', 'striped', '2'),
             ('red', 'oval', 'outlined', '3')
         ]
-        self.attr_count = 4
+        self.attr_count = constants.DIMENSION_COUNT
+        self.attr_size = constants.DIMENSION_SIZE
 
     def test_is_valid_false_when_only_two_shared_attrs(self):
         """Test set validity function returns False when not a set.
@@ -70,14 +74,14 @@ class TestIsValidSet(unittest.TestCase):
         is invalid.
         """
         self.assertEqual(
-            is_valid_set(self.invalid_set, self.attr_count),
+            is_valid_set(self.invalid_set, self.attr_count, self.attr_size),
             False
         )
 
     def test_is_valid_when_set_rules_followed(self):
         """Test set validity function returns True when set."""
         self.assertEqual(
-            is_valid_set(self.valid_set, self.attr_count),
+            is_valid_set(self.valid_set, self.attr_count, self.attr_size),
             True
         )
 
@@ -93,7 +97,7 @@ class TestIsValidSet(unittest.TestCase):
             ('red', 'oval', 'outlined', '3', 'tan')
         ]
         self.assertEqual(
-            is_valid_set(new_set, 5),
+            is_valid_set(new_set, self.attr_count + 1, self.attr_size),
             True
         )
 

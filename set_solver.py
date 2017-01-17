@@ -1,8 +1,8 @@
 """Solve a game of set."""
-import sys
-
 import itertools
 import random
+
+import constants
 
 
 def get_all_possible_cards(attributes):
@@ -17,15 +17,21 @@ def get_all_possible_cards(attributes):
     return(full_deck)
 
 
-def get_cards(n, attr_count):
+def get_cards(n, attr_count, attr_size):
     """Get n number of set cards. Each card must be unique.
 
-    attr_count is the number of dimensions of each card.
+    attr_count is the number of dimensions of each card
+    attr_size is the dimension size (i.e. n colors, n shapes...)
     """
-    # Still assuming 3 dimensions for each attribute
+    # Create tuple that is attr_size
+    attributes = []
+    for i in range(attr_size):
+        attributes.append(i)
+
     attribute_list = []
     for i in range(attr_count):
-        attribute_list.append((0, 1, 2))
+        # append a tuple that is length of attr_size
+        attribute_list.append(tuple(attributes))
 
     # Full_deck is a set...
     full_deck = get_all_possible_cards(attribute_list)
@@ -33,14 +39,12 @@ def get_cards(n, attr_count):
     # Select random n cards from full_deck to build player's deck
     player_deck = random.sample(full_deck, n)
 
-    # This returns a list of tuples where each inner list is, in order,
-    # the card attributes passed to get_all_possible_cards.
-    # TODO: find a nicer way to display this to user.
-    print(("Player deck: \n {player_deck} \n").format(player_deck=player_deck))
+    # This returns a list of tuples where each inner list is,
+    # in order, the card attributes passed to get_all_possible_cards.
     return(player_deck)
 
 
-def is_valid_set(cards, attr_count):
+def is_valid_set(cards, attr_count, attr_size):
         """Check if the set is valid.
 
         This check uses set() on each group of card attributes
@@ -49,52 +53,60 @@ def is_valid_set(cards, attr_count):
         will have length 3 (or whatever attr_number is, to implement later)
         """
         for i in range(attr_count):
-            # any time that ONLY 2 cards have different attributes, we don't
-            # have a set. Since python's set() will remove duplicates and
-            # is quick to construct/lookup, we use that.
-            # i.e. if 3 attributes are shared, len will == 0,
-            # if all three are different, len will == 3.
-            # TODO: how does this need to change to allow for an
-            # arbitrary number of attributes? == attr_number-1 I THINK.
-            if len(set(card[i] for card in cards)) == 2:
+            # Since python's set() will remove duplicates and
+            # is quick to construct/lookup, we use that to check if
+            # either all attributes match across cards, or if none do
+            # (since a set of all shared attributes will remove duplicates,
+            # yielding a set of 1)
+            if 1 < len(set(card[i] for card in cards)) < attr_size:
                 return(False)
         return(True)
 
 
-def play_set(player_deck, attr_count):
+def play_set(player_deck, attr_count, attr_size):
     """Given a set of cards, find all possible set combinations."""
-    # TODO: return the number of solution sets, then show them:
-    # think about the best way to return this information,
-    # also remember that isn't very important in the grand scheme
-    # of the problem. But move print statements out of functions and
-    # into main() program runner.
     set_count = 0
-    for cards in itertools.combinations(player_deck, 3):
-        if not is_valid_set(cards, attr_count):
+
+    for cards in itertools.combinations(player_deck, attr_size):
+        if not is_valid_set(cards, attr_count, attr_size):
             continue
         set_count += 1
         print(("Set #{}:").format(set_count))
         for card in cards:
             print(card, end="\n")
-        # print()
+
+    # Explicit messaging if no sets are found
+    if set_count == 0:
+        print("No sets are possible with this hand.")
 
 
 if __name__ == '__main__':
-    # TODO: update this to be more interactive, getting input from user as we
-    # "play" the game.
+    # Prompt user for cards, dimension count, and dimension size.
+    size_of_hand = int(input("""
+        Enter the nuber of cards you wish to play with, between 3 and 81.
+        If you wish to use the game default of 12, just press enter!
+    """) or constants.HAND_SIZE)
 
-    # Handle missing args gracefully.
-    if not len(sys.argv) == 3:
-        print("""
-            This program requires you to pass in the number of cards you
-            wish to play with as an argument, as well as the number of
-            dimensions (color, shading, etc) each card has.
+    dimension_count = int(input("""
+        Enter the number of unique dimensions each card has, i.e.
+        if your cards have color, shading, shape, background,
+        and count, enter 5.
+        If you wish to use the game default of 4, just press enter!
+    """) or constants.DIMENSION_COUNT)
 
-            $ python3 set_solver.py 12 4
-            where 12 is the number of cards and 4 is the number of dimensions
+    dimension_size = int(input("""
+        Enter the number of possible items in each dimension, i.e.
+        if there are 5 possible colors, enter 5.
+        If you wish to use the game default of 3, just press enter!
+    """) or constants.DIMENSION_SIZE)
 
-            Please try again!
-        """)
-    else:
-        player_deck = get_cards(int(sys.argv[1]), int(sys.argv[2]))
-        play_set(player_deck, int(sys.argv[2]))
+    # Display all cards in hand
+    player_deck = get_cards(size_of_hand, dimension_count, dimension_size)
+    print("Great! Here is your hand:")
+    for card in player_deck:
+        print(card)
+    print('\n')
+    # Find and print viable sets
+    input("Press enter to see all possible sets made with this hand.")
+    play_set(player_deck, dimension_count, dimension_size)
+    print("\nThanks for playing!\n")

@@ -7,3 +7,9 @@ In case you're unfamiliar with Set, you can [read about it](https://en.wikipedia
 Given a number of cards in a player's hand, this Set solver takes an arbitrary (user-provided) number of dimensions per card (i.e. a card has a background color in addition to color, shape, shading, and number, giving the card 5 dimensions) and an arbitrary size (i.e. each card may now have 4 of every dimension instead of the standard 3).
 
 The solver will print out the player's hand as well as every possible set that can be made from that hand.
+
+## Run the game
+$ python set_solver.py
+
+## Run tests
+$ python -m unittest tests.py
