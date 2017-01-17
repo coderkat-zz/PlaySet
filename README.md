@@ -11,7 +11,8 @@ The game will default to a hand of 12 cards with 4 diemsions and 3 options for e
 The solver will print out the player's hand as well as every possible set that can be made from that hand.
 
 ## Run the game
+Please use Python3 to run this program. There are no other dependencies.
 $ python set_solver.py
 
-## Run tests
+## Run unit tests
 $ python -m unittest tests.py
