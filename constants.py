@@ -1,6 +1,8 @@
 """Constant values for set_solver.py."""
 
 # Default properties for a game of set.
+MIN_HAND_SIZE = 3
+MAX_HAND_SIZE = 81
 HAND_SIZE = 12
 DIMENSION_COUNT = 4
 DIMENSION_SIZE = 3
@@ -11,6 +13,11 @@ HAND_SIZE_PROMPT = """
     Enter the nuber of cards you wish to play with, between 3 and 81.
     If you wish to use the game default of 12, just press enter:
 """
+HAND_SIZE_OUT_OF_RANGE_PROMPT = """
+    Sorry, you must have a hand size of at least 3 cards
+    and no more than 81 cards.
+    We've set your hand size to the default of {size}.
+""".format(size=HAND_SIZE)
 DIMENSION_COUNT_PROMPT = """
     Enter the number of unique dimensions each card has.
     For example, if your cards have color, shading, shape,

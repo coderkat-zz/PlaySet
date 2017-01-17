@@ -86,6 +86,10 @@ if __name__ == '__main__':
         constants.HAND_SIZE_PROMPT
     ) or constants.HAND_SIZE)
 
+    if not constants.MIN_HAND_SIZE < size_of_hand < constants.MAX_HAND_SIZE:
+        size_of_hand = constants.HAND_SIZE
+        print(constants.HAND_SIZE_OUT_OF_RANGE_PROMPT)
+
     dimension_count = int(input(
         constants.DIMENSION_COUNT_PROMPT
     ) or constants.DIMENSION_COUNT)
@@ -109,6 +113,6 @@ if __name__ == '__main__':
     print('\n')
 
     # Find and print viable sets
-    input("Press enter to see all possible sets made with this hand.")
+    input("Press enter to see all possible sets made with this hand.\n")
     play_set(player_deck, dimension_count, dimension_size, set_size)
     print("\nThanks for playing!\n")
