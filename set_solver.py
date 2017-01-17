@@ -48,9 +48,7 @@ def is_valid_set(cards, dimension_count):
         for i in range(dimension_count):
             # Since python's set() will remove duplicates and
             # is quick to construct/lookup, we use that to check if
-            # either all attributes match across cards, or if none do
-            # (since a set of all shared attributes will remove duplicates,
-            # yielding a set of 1)
+            # either all attributes match across cards, or if none do.
             if 1 < len(set(card[i] for card in cards)) < len(cards):
                 return(False)
         return(True)
@@ -74,7 +72,7 @@ def play_set(player_deck, dimension_count, set_size):
 
 
 if __name__ == '__main__':
-    # Prompt user for cards, dimension count, and dimension size.
+    # Prompt user for cards, dimension count, dimension size, and set size
     size_of_hand = int(input(
         constants.HAND_SIZE_PROMPT
     ) or constants.HAND_SIZE)
@@ -98,14 +96,14 @@ if __name__ == '__main__':
         set_size = constants.SET_SIZE
         print(constants.SET_TOO_SMALL_PROMPT)
 
-    # Display all cards in hand
+    # Display all cards in hand to user
     player_deck = get_cards(size_of_hand, dimension_count, dimension_size)
     print("Great! Here is your hand:")
     for card in player_deck:
         print(card)
     print('\n')
 
-    # Find and print viable sets
+    # Find and print all viable sets from cards in hand.
     input("Press enter to see all possible sets made with this hand.\n")
     play_set(player_deck, dimension_count, set_size)
     print("\nThanks for playing!\n")
