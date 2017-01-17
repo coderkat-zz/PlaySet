@@ -11,7 +11,8 @@ def get_all_possible_cards(attributes):
     This method takes a list of tuples, where each tuple
     is the set of attributes available for the card.
     """
-    # using python's itertools, create set of all possible cards
+    # Using python's itertools, create set (cartesian product)
+    # of all possible cards: think of this as the full Set deck.
     full_deck = set(itertools.product(*attributes))
 
     return(full_deck)
@@ -19,20 +20,16 @@ def get_all_possible_cards(attributes):
 
 def get_cards(n, dimension_count, dimension_size):
     """Get n number of set cards. Each card must be unique."""
-    # Create tuple that is dimension_size
-    attributes = []
-    for i in range(dimension_size):
-        attributes.append(i)
-
+    # Build list of card attributes, where each dimension
+    # is a tuple of dimension_size options. This sets the
+    # rules for each card in full_deck.
     attribute_list = []
     for i in range(dimension_count):
-        # append a tuple that is length of dimension_size
-        attribute_list.append(tuple(attributes))
+        attribute_list.append(tuple(i for i in range(dimension_size)))
 
-    # Full_deck is a set...
     full_deck = get_all_possible_cards(attribute_list)
 
-    # Select random n cards from full_deck to build player's deck
+    # Select random n cards from full_deck to build player's deck.
     player_deck = random.sample(full_deck, n)
 
     # This returns a list of tuples where each inner list is,
