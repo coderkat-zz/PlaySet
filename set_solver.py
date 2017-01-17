@@ -44,7 +44,7 @@ def get_cards(n, attr_count, attr_size):
     return(player_deck)
 
 
-def is_valid_set(cards, attr_count, attr_size):
+def is_valid_set(cards, attr_count):
         """Check if the set is valid.
 
         This check uses set() on each group of card attributes
@@ -58,7 +58,12 @@ def is_valid_set(cards, attr_count, attr_size):
             # either all attributes match across cards, or if none do
             # (since a set of all shared attributes will remove duplicates,
             # yielding a set of 1)
-            if 1 < len(set(card[i] for card in cards)) < attr_size:
+
+            # STILL ASSUMING 3-CARD SETS.
+            # TODO: make a 3rd arg to this fn called set_size
+            # that allows for a user-generated size of set:
+            # then, change 3 below to set_size.
+            if 1 < len(set(card[i] for card in cards)) < 3:
                 return(False)
         return(True)
 
@@ -68,7 +73,7 @@ def play_set(player_deck, attr_count, attr_size):
     set_count = 0
 
     for cards in itertools.combinations(player_deck, attr_size):
-        if not is_valid_set(cards, attr_count, attr_size):
+        if not is_valid_set(cards, attr_count):
             continue
         set_count += 1
         print(("Set #{}:").format(set_count))

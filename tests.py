@@ -29,7 +29,7 @@ class TestGetCards(unittest.TestCase):
             self.default_attr_size)
         self.assertEqual(
             len(player_deck),
-            self.default_card_count
+            constants.HAND_SIZE
         )
 
     def test_get_cards_handles_variable_dimensions(self):
@@ -44,6 +44,16 @@ class TestGetCards(unittest.TestCase):
         )
         self.assertEqual(len(player_deck[0]), 6)
 
+    def test_get_cards_with_var_dimension_size_works(self):
+        """Test passing attr_size beyond default works as expected."""
+        player_deck = get_cards(
+            self.default_card_count,
+            self.default_attr_count,
+            self.default_attr_size + 2
+        )
+        self.assertEqual(len(player_deck), self.default_card_count)
+        self.assertEqual(len(player_deck[0]), constants.DIMENSION_COUNT)
+
 
 class TestIsValidSet(unittest.TestCase):
     """Tests for is_valid_set function."""
@@ -52,7 +62,9 @@ class TestIsValidSet(unittest.TestCase):
         """Set up for tests.
 
         Create some dummy sets for testing, using
-        4-attribute, 3-card sets.
+        4-attribute, 3-card sets. Values could be anything here,
+        as the program is agnostic and should work on strings as
+        well as integers.
         """
         self.invalid_set = [
             ('red', 'oval', 'solid', '1'),
@@ -70,22 +82,23 @@ class TestIsValidSet(unittest.TestCase):
     def test_is_valid_false_when_only_two_shared_attrs(self):
         """Test set validity function returns False when not a set.
 
-        If two cards (but not three) share any one attribute, the set
+        In the default configuration (where we have 3 attributes), if
+        two cards (but not three) share any one attribute, the set
         is invalid.
         """
         self.assertEqual(
-            is_valid_set(self.invalid_set, self.attr_count, self.attr_size),
+            is_valid_set(self.invalid_set, self.attr_count),
             False
         )
 
     def test_is_valid_when_set_rules_followed(self):
-        """Test set validity function returns True when set."""
+        """Test set validity function returns True when is a set."""
         self.assertEqual(
-            is_valid_set(self.valid_set, self.attr_count, self.attr_size),
+            is_valid_set(self.valid_set, self.attr_count),
             True
         )
 
-    def test_is_valid_longer_var_count(self):
+    def test_is_valid_longer_attribute_count(self):
         """Test set validity on a set with more than 4 card attributes.
 
         i.e. this method should work as expected even if we add a new
@@ -97,9 +110,35 @@ class TestIsValidSet(unittest.TestCase):
             ('red', 'oval', 'outlined', '3', 'tan')
         ]
         self.assertEqual(
-            is_valid_set(new_set, self.attr_count + 1, self.attr_size),
+            is_valid_set(new_set, self.attr_count + 1),
             True
         )
+
+    def test_is_valid_larger_attribute_size(self):
+        """Test set validity on a set with a dimension size of 4."""
+        # Create a set where the dimension size is 4
+        new_valid_set = [
+            (3, 0, 0, 3),
+            (3, 1, 3, 2),
+            (3, 2, 1, 0),
+        ]
+        self.assertEqual(
+            is_valid_set(new_valid_set, self.attr_count),
+            True
+        )
+
+    def test_is_not_valid_larger_attribute_size(self):
+        """Test set validity on an invalid set with dimension size of 4."""
+        new_invalid_set = [
+            (3, 0, 0, 3),
+            (3, 1, 3, 2),
+            (3, 0, 1, 2),
+        ]
+        self.assertEqual(
+            is_valid_set(new_invalid_set, self.attr_count),
+            False
+        )
+
 
 if __name__ == '__main__':
     unittest.main()
