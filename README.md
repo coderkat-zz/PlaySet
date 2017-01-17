@@ -16,3 +16,8 @@ $ python set_solver.py
 
 ## Run unit tests
 $ python -m unittest tests.py
+
+## TODO: a list!
+* Allow users to input actual values for dimensions, i.e. user can add a new color, yellow, to the color dimension. That way, output is a little more fun and readable.
+* Let users guess the sets themselves, then check if they're correct or not: aka,
+actually PLAY set.
