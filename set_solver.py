@@ -87,23 +87,24 @@ def play_set(player_deck, attr_count, attr_size):
 
 if __name__ == '__main__':
     # Prompt user for cards, dimension count, and dimension size.
-    size_of_hand = int(input("""
-        Enter the nuber of cards you wish to play with, between 3 and 81.
-        If you wish to use the game default of 12, just press enter!
-    """) or constants.HAND_SIZE)
+    size_of_hand = int(input(
+        constants.HAND_SIZE_PROMPT
+    ) or constants.HAND_SIZE)
 
-    dimension_count = int(input("""
-        Enter the number of unique dimensions each card has, i.e.
-        if your cards have color, shading, shape, background,
-        and count, enter 5.
-        If you wish to use the game default of 4, just press enter!
-    """) or constants.DIMENSION_COUNT)
+    dimension_count = int(input(
+        constants.DIMENSION_COUNT_PROMPT
+    ) or constants.DIMENSION_COUNT)
 
-    dimension_size = int(input("""
-        Enter the number of possible items in each dimension, i.e.
-        if there are 5 possible colors, enter 5.
-        If you wish to use the game default of 3, just press enter!
-    """) or constants.DIMENSION_SIZE)
+    dimension_size = int(input(
+        constants.DIMENSION_SIZE_PROMPT
+    ) or constants.DIMENSION_SIZE)
+
+    set_size = int(input(
+        constants.SET_SIZE_PROMPT
+    ) or constants.SET_SIZE)
+    if set_size < constants.SET_SIZE:
+        set_size = constants.SET_SIZE
+        print(constants.SET_TOO_SMALL_PROMPT)
 
     # Display all cards in hand
     player_deck = get_cards(size_of_hand, dimension_count, dimension_size)
