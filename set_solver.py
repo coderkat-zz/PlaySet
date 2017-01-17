@@ -17,20 +17,16 @@ def get_all_possible_cards(attributes):
     return(full_deck)
 
 
-def get_cards(n, attr_count, attr_size):
-    """Get n number of set cards. Each card must be unique.
-
-    attr_count is the number of dimensions of each card
-    attr_size is the dimension size (i.e. n colors, n shapes...)
-    """
-    # Create tuple that is attr_size
+def get_cards(n, dimension_count, dimension_size):
+    """Get n number of set cards. Each card must be unique."""
+    # Create tuple that is dimension_size
     attributes = []
-    for i in range(attr_size):
+    for i in range(dimension_size):
         attributes.append(i)
 
     attribute_list = []
-    for i in range(attr_count):
-        # append a tuple that is length of attr_size
+    for i in range(dimension_count):
+        # append a tuple that is length of dimension_size
         attribute_list.append(tuple(attributes))
 
     # Full_deck is a set...
@@ -44,7 +40,7 @@ def get_cards(n, attr_count, attr_size):
     return(player_deck)
 
 
-def is_valid_set(cards, attr_count):
+def is_valid_set(cards, dimension_count):
         """Check if the set is valid.
 
         This check uses set() on each group of card attributes
@@ -52,7 +48,7 @@ def is_valid_set(cards, attr_count):
         attributes will have length 0, and a group of unique attributes
         will have length equal to whatever the size of our desired set is.
         """
-        for i in range(attr_count):
+        for i in range(dimension_count):
             # Since python's set() will remove duplicates and
             # is quick to construct/lookup, we use that to check if
             # either all attributes match across cards, or if none do
@@ -63,17 +59,17 @@ def is_valid_set(cards, attr_count):
         return(True)
 
 
-def play_set(player_deck, attr_count, attr_size, set_size):
+def play_set(player_deck, dimension_count, set_size):
     """Given a set of cards, find all possible set combinations."""
     set_count = 0
 
     for cards in itertools.combinations(player_deck, set_size):
-        if not is_valid_set(cards, attr_count):
+        if not is_valid_set(cards, dimension_count):
             continue
         set_count += 1
         print(("Set #{}:").format(set_count))
         for card in cards:
-            print(card, end="\n")
+            print(card)
 
     # Explicit messaging if no sets are found
     if set_count == 0:
@@ -114,5 +110,5 @@ if __name__ == '__main__':
 
     # Find and print viable sets
     input("Press enter to see all possible sets made with this hand.\n")
-    play_set(player_deck, dimension_count, dimension_size, set_size)
+    play_set(player_deck, dimension_count, set_size)
     print("\nThanks for playing!\n")
