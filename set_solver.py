@@ -5,19 +5,13 @@ import itertools
 import random
 
 
-# TODO: later, this will need to accept *args
 def get_all_possible_cards(attributes):
     """Get every possible set card in the deck.
 
     This method takes a list of tuples, where each tuple
-    is the set of attributes available for the card, i.e.:
-    [('red', 'green', 'purple'), ('heart', 'diamond', 'squiggle')...]
+    is the set of attributes available for the card.
     """
-    # using itertools, create set of all options
-    # itertools is python's awesome builtin way to do cartesian product.
-    # TODO: is there a more efficient way to do this in python?
-    # May require implemending a generator like before...
-
+    # using python's itertools, create set of all possible cards
     full_deck = set(itertools.product(*attributes))
 
     return(full_deck)
@@ -25,11 +19,6 @@ def get_all_possible_cards(attributes):
 
 def get_cards(n, attr_count):
     """Get n number of set cards. Each card must be unique.
-
-    Returns a list of lists representing the deck of cards.
-    TODO: find a better/faster data structure that makes sense.
-    Figure out how to use a set of tuples?!? works great b/c tuples are
-    immutable...
 
     attr_count is the number of dimensions of each card.
     """
@@ -41,11 +30,7 @@ def get_cards(n, attr_count):
     # Full_deck is a set...
     full_deck = get_all_possible_cards(attribute_list)
 
-    # Select random n cards from set_option to build player's deck
-
-    # player deck will be list b/c of how random.sample works.
-    # TODO: if this needs to be a set, can just cast list of tuples
-    # to set()
+    # Select random n cards from full_deck to build player's deck
     player_deck = random.sample(full_deck, n)
 
     # This returns a list of tuples where each inner list is, in order,
@@ -78,15 +63,8 @@ def is_valid_set(cards, attr_count):
 
 def play_set(player_deck, attr_count):
     """Given a set of cards, find all possible set combinations."""
-    # iterate over every pair (use itertools, look into itertools.combination)
-    # This is going to be a recursive solution (hopefully using conbination!)
-    # itertools.combinations(p[, r]) returns r-length tuples, in sorted order,
-    # with no repeated elements
-
-    # TODO: pass in attr_count as a var if we want to allow a larger or var set
-
-    # TODO: return the number of sets, then show them.
-    # TODO: think about the best way to return this information,
+    # TODO: return the number of solution sets, then show them:
+    # think about the best way to return this information,
     # also remember that isn't very important in the grand scheme
     # of the problem. But move print statements out of functions and
     # into main() program runner.
