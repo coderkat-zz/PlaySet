@@ -139,6 +139,19 @@ class TestIsValidSet(unittest.TestCase):
             False
         )
 
+    def test_is_valid_on_arbitrary_num_of_cards(self):
+        """Test passing an arbitrary number of cards to is_valid."""
+        big_valid_set = [
+            (3, 3, 2, 1),
+            (1, 3, 2, 3),
+            (2, 3, 2, 2),
+            (0, 3, 2, 0),
+        ]
+        self.assertEqual(
+            is_valid_set(big_valid_set, self.attr_count),
+            True
+        )
+
 
 if __name__ == '__main__':
     unittest.main()

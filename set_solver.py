@@ -50,7 +50,7 @@ def is_valid_set(cards, attr_count):
         This check uses set() on each group of card attributes
         to quickly eliminate duplicates. A group of matching
         attributes will have length 0, and a group of unique attributes
-        will have length 3 (or whatever attr_number is, to implement later)
+        will have length equal to whatever the size of our desired set is.
         """
         for i in range(attr_count):
             # Since python's set() will remove duplicates and
@@ -58,21 +58,16 @@ def is_valid_set(cards, attr_count):
             # either all attributes match across cards, or if none do
             # (since a set of all shared attributes will remove duplicates,
             # yielding a set of 1)
-
-            # STILL ASSUMING 3-CARD SETS.
-            # TODO: make a 3rd arg to this fn called set_size
-            # that allows for a user-generated size of set:
-            # then, change 3 below to set_size.
-            if 1 < len(set(card[i] for card in cards)) < 3:
+            if 1 < len(set(card[i] for card in cards)) < len(cards):
                 return(False)
         return(True)
 
 
-def play_set(player_deck, attr_count, attr_size):
+def play_set(player_deck, attr_count, attr_size, set_size):
     """Given a set of cards, find all possible set combinations."""
     set_count = 0
 
-    for cards in itertools.combinations(player_deck, attr_size):
+    for cards in itertools.combinations(player_deck, set_size):
         if not is_valid_set(cards, attr_count):
             continue
         set_count += 1
@@ -112,7 +107,8 @@ if __name__ == '__main__':
     for card in player_deck:
         print(card)
     print('\n')
+
     # Find and print viable sets
     input("Press enter to see all possible sets made with this hand.")
-    play_set(player_deck, dimension_count, dimension_size)
+    play_set(player_deck, dimension_count, dimension_size, set_size)
     print("\nThanks for playing!\n")
