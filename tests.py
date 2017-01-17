@@ -14,10 +14,32 @@ from set_solver import (
 class TestGetCards(unittest.TestCase):
     """Tests for building out the set deck."""
 
+    def setUp(self):
+        """Some setup for constants."""
+        self.default_card_count = 12
+        self.default_attr_count = 4
+
     def test_n_cards_are_returned(self):
         """Test that we get the expected number of cards back in deck."""
-        player_deck = get_cards(12)
-        self.assertEqual(len(player_deck), 12)
+        player_deck = get_cards(
+            self.default_card_count,
+            self.default_attr_count
+        )
+        self.assertEqual(
+            len(player_deck),
+            self.default_card_count
+        )
+
+    def test_get_cards_handles_variable_dimensions(self):
+        """Test that get_cards creates cards with the proper n dimensions.
+
+        i.e. a card with 6 dimensions should have a length of 6.
+        """
+        player_deck = get_cards(
+            self.default_card_count,
+            self.default_attr_count + 2
+        )
+        self.assertEqual(len(player_deck[0]), 6)
 
 
 class TestIsValidSet(unittest.TestCase):

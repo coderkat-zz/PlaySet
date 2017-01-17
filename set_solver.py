@@ -6,7 +6,7 @@ import random
 
 
 # TODO: later, this will need to accept *args
-def get_all_possible_cards(colors, symbols, shading, symbol_count):
+def get_all_possible_cards(attributes):
     """Get every possible set card in the deck.
 
     This method takes a list of tuples, where each tuple
@@ -17,28 +17,29 @@ def get_all_possible_cards(colors, symbols, shading, symbol_count):
     # itertools is python's awesome builtin way to do cartesian product.
     # TODO: is there a more efficient way to do this in python?
     # May require implemending a generator like before...
-    full_deck = set(itertools.product(colors, symbols, shading, symbol_count))
+
+    full_deck = set(itertools.product(*attributes))
 
     return(full_deck)
 
 
-def get_cards(n):
+def get_cards(n, attr_count):
     """Get n number of set cards. Each card must be unique.
 
     Returns a list of lists representing the deck of cards.
     TODO: find a better/faster data structure that makes sense.
     Figure out how to use a set of tuples?!? works great b/c tuples are
     immutable...
+
+    attr_count is the number of dimensions of each card.
     """
-    # FOR NOW, hard code this. Later we'll make this something a user
-    # can change.
-    colors = ('red', 'green', 'purple')
-    symbols = ('squiggle', 'diamond', 'oval')
-    shading = ('solid', 'striped', 'outlined')
-    symbol_count = ('1', '2', '3')
+    # Still assuming 3 dimensions for each attribute
+    attribute_list = []
+    for i in range(attr_count):
+        attribute_list.append((0, 1, 2))
 
     # Full_deck is a set...
-    full_deck = get_all_possible_cards(colors, symbols, shading, symbol_count)
+    full_deck = get_all_possible_cards(attribute_list)
 
     # Select random n cards from set_option to build player's deck
 
@@ -75,7 +76,7 @@ def is_valid_set(cards, attr_count):
         return(True)
 
 
-def play_set(player_deck):
+def play_set(player_deck, attr_count):
     """Given a set of cards, find all possible set combinations."""
     # iterate over every pair (use itertools, look into itertools.combination)
     # This is going to be a recursive solution (hopefully using conbination!)
@@ -83,7 +84,6 @@ def play_set(player_deck):
     # with no repeated elements
 
     # TODO: pass in attr_count as a var if we want to allow a larger or var set
-    attr_count = 4
 
     # TODO: return the number of sets, then show them.
     # TODO: think about the best way to return this information,
@@ -102,16 +102,21 @@ def play_set(player_deck):
 
 
 if __name__ == '__main__':
+    # TODO: update this to be more interactive, getting input from user as we
+    # "play" the game.
+
     # Handle missing args gracefully.
-    if not len(sys.argv) == 2:
+    if not len(sys.argv) == 3:
         print("""
             This program requires you to pass in the number of cards you
-            wish to play with as an argument, i.e.:
+            wish to play with as an argument, as well as the number of
+            dimensions (color, shading, etc) each card has.
 
-            $ python3 set_solver.py 12
+            $ python3 set_solver.py 12 4
+            where 12 is the number of cards and 4 is the number of dimensions
 
             Please try again!
         """)
     else:
-        player_deck = get_cards(int(sys.argv[1]))
-        play_set(player_deck)
+        player_deck = get_cards(int(sys.argv[1]), int(sys.argv[2]))
+        play_set(player_deck, int(sys.argv[2]))
